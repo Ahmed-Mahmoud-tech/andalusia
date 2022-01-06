@@ -175,7 +175,7 @@ export default {
         });
       }
       // store.dispatch("serveData", finalData);
-      realUpdateHere.value++;
+      realUpdate.value++;
     };
 
     const checkZeroFun = (e) => {

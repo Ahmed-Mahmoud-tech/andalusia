@@ -141,7 +141,7 @@ export default {
   setup(props) {
     const store = useStore();
     const rows = ref([]);
-    const realUpdateHere = ref(0);
+    const realUpdateHere = ref(1);
     const filter = ref("");
     const loading = ref(false);
     const pagination = ref({
@@ -166,15 +166,19 @@ export default {
       descending,
       type
     ) => {
-      console.log();
+      console.log("originalowsxxxxxxxxxx", type);
       const data = filter
-        ? originalRows.filter((row) => row[type].toString().includes(filter))
+        ? originalRows.filter((row) => {
+            console.log(filter);
+            return row[type].toString().includes(filter);
+          })
         : originalRows.slice();
+      console.log("originalowsxxxxxxxxxx", data);
 
       // handle sortBy
       if (sortBy) {
         const sortFn =
-          sortBy === "desc"
+          sortBy === "product"
             ? descending
               ? (a, b) => (a.name > b.name ? -1 : a.name < b.name ? 1 : 0)
               : (a, b) => (a.name > b.name ? 1 : a.name < b.name ? -1 : 0)
@@ -183,8 +187,17 @@ export default {
             : (a, b) => parseFloat(a[sortBy]) - parseFloat(b[sortBy]);
         data.sort(sortFn);
       }
+      console.log("data", data);
+      console.log("startRow", startRow, count);
 
-      return data.slice(startRow, startRow + count);
+      if (count) {
+        console.log("startRow", startRow, count);
+
+        return data.slice(startRow, startRow + count);
+      } else {
+        return data.slice(0, 5);
+      }
+      return data;
     };
 
     // emulate 'SELECT count(*) FROM ...WHERE...'
@@ -202,10 +215,13 @@ export default {
     }
 
     function onRequest(props, type = "product") {
-      // console.log(props);
       const { page, rowsPerPage, sortBy, descending } = props.pagination;
-      const filter = props.filter;
-
+      let filter;
+      if (typeof props.filter == "string") {
+        filter = props.filter;
+      } else {
+        filter = "";
+      }
       loading.value = true;
 
       // emulate server
@@ -246,10 +262,14 @@ export default {
 
     onUpdated(() => {
       if (props.realUpdate == realUpdateHere.value && props.realUpdate != 0) {
-        // onRequest({ pagination });
-        realUpdateHere.value = props.realUpdate;
+        originalRows = props.finalData;
+        console.log(originalRows);
+        setTimeout(() => {
+          onRequest({ pagination, filter });
+        }, 1000);
+        realUpdateHere.value++;
       }
-      console.log("updated");
+      console.log(props.realUpdate);
     });
 
     onMounted(() => {
@@ -284,7 +304,7 @@ span.q-table__bottom-item {
   width: 100%;
 } */
 
-.q-table__bottom .q-table__separator {
+/* .q-table__bottom .q-table__separator {
   display: none;
 }
 
@@ -313,5 +333,5 @@ span.q-table__bottom-item {
 
 .q-table__control:nth-child(3) span.q-table__bottom-item:after {
   content: " items";
-}
+} */
 </style>
