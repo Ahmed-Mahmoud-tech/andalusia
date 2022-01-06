@@ -12,40 +12,28 @@
       binary-state-sort
     >
       <template v-slot:top-right>
-        <!-- <q-input
-          borderless
-          dense
-          debounce="300"
-          v-model="filter"
-          placeholder="Search"
-        >
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input> -->
         <input
           type="text"
-          placeholder="name"
+          placeholder="product"
           @keyup="
-            onRequest({ pagination, filter: $event.target.value }, 'name')
+            onRequest({ pagination, filter: $event.target.value }, 'product')
           "
         />
-
         <input
           type="text"
-          placeholder="calcium"
+          placeholder="onHand"
           @keyup="
-            onRequest({ pagination, filter: $event.target.value }, 'calcium')
+            onRequest({ pagination, filter: $event.target.value }, 'onHand')
           "
         />
-
+        <!-- 
         <input
           type="text"
           placeholder="iron"
           @keyup="
-            onRequest({ pagination, filter: $event.target.value }, 'iron')
+            onRequest({ pagination, filter: $event.target.value }, 'type')
           "
-        />
+        /> -->
       </template>
     </q-table>
   </div>
@@ -53,34 +41,33 @@
 
 <script>
 import { ref, onMounted } from "vue";
+import { useStore } from "vuex";
 
 const columns = [
   {
-    name: "desc",
-    required: true,
-    label: "Dessert (100g serving)",
+    name: "product",
+    label: "product",
+    field: "product",
     align: "left",
-    field: (row) => row.name,
-    format: (val) => `${val}`,
-    sortable: true,
+
+    // format: (val) => `${val}`,
+    // sortable: true,
   },
   {
-    name: "calcium",
-    label: "Calcium (%)",
-    field: (row) => row.calcium,
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+    name: "onHand",
+    label: "onHand",
+    field: "onHand",
+    align: "left",
   },
-  {
-    name: "iron",
-    label: "Iron (%)",
-    field: "iron",
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  },
+  // {
+  //   name: "type",
+  //   label: "type",
+  //   field: "type",
+  //   align: "left",
+  // },
 ];
 
-const originalRows = [
+const originalRowsold = [
   {
     id: 1,
     name: "Frozen Yogurt",
@@ -151,16 +138,23 @@ const originalRows = [
 
 export default {
   setup() {
+    const store = useStore();
     const rows = ref([]);
+    const tableData = ref(store.state.WHs["WH_one"]["type-one-1"]);
+
     const filter = ref("");
     const loading = ref(false);
     const pagination = ref({
-      sortBy: "desc",
+      sortBy: "product",
       descending: false,
       page: 1,
-      rowsPerPage: 10,
+      rowsPerPage: 5,
       rowsNumber: 10,
     });
+
+    let originalRows = tableData.value;
+
+    console.log(originalRows);
 
     // emulate ajax call
     // SELECT * FROM ... WHERE...LIMIT...
@@ -172,9 +166,9 @@ export default {
       descending,
       type
     ) => {
-      // console.log(startRow, count, filter, sortBy, descending);
+      console.log();
       const data = filter
-        ? originalRows.filter((row) => row[type].includes(filter))
+        ? originalRows.filter((row) => row[type].toString().includes(filter))
         : originalRows.slice();
 
       // handle sortBy
@@ -200,14 +194,14 @@ export default {
       }
       let count = 0;
       originalRows.forEach((treat) => {
-        if (treat.name.includes(filter)) {
+        if (treat.product.includes(filter)) {
           ++count;
         }
       });
       return count;
     }
 
-    function onRequest(props, type = "name") {
+    function onRequest(props, type = "product") {
       // console.log(props);
       const { page, rowsPerPage, sortBy, descending } = props.pagination;
       const filter = props.filter;
@@ -264,10 +258,52 @@ export default {
       pagination,
       columns,
       rows,
+      tableData,
       fetchFromServer,
-
       onRequest,
     };
   },
 };
 </script>
+
+<style>
+/* .q-table__control:nth-child(2),
+span.q-table__bottom-item {
+  display: none !important;
+}
+
+.q-table__bottom .q-table__control {
+  width: 100%;
+} */
+
+.q-table__bottom .q-table__separator {
+  display: none;
+}
+
+.q-table__bottom.row.items-center.justify-end {
+  justify-content: space-between;
+  flex-direction: row-reverse;
+}
+
+.q-table__control:nth-child(2) > span.q-table__bottom-item {
+  display: none;
+}
+
+.q-table__control:nth-child(3) span.q-table__bottom-item {
+  position: absolute;
+  right: 20px;
+}
+
+.q-table__control:nth-child(3) {
+  width: 100%;
+}
+
+.q-table__control:nth-child(2) {
+  position: absolute;
+  right: 25%;
+}
+
+.q-table__control:nth-child(3) span.q-table__bottom-item:after {
+  content: " items";
+}
+</style>
