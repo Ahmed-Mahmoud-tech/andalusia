@@ -18,37 +18,44 @@
       </div>
     </div>
     <nav class="container">
-      <div class="bars" @click="toggle">
-        <font-awesome-icon :icon="['fas', 'bars']" />
+      <div class="bars">
+        <q-icon name="apps" @click="toggleMenu" />
       </div>
       <div class="main-nav">
-        <font-awesome-icon :icon="['fas', 'home']" class="home-icon" />
-        <router-link to="/">Home</router-link>
-        <font-awesome-icon :icon="['fas', 'chevron-right']" />
-        <router-link to="/Product">Product</router-link>
+        <q-icon size="1.5em" name="home" />
+
+        <router-link to="/" class="active">
+          <q-icon size="1.5em" name="chevron_right" />Home</router-link
+        >
+
+        <router-link to="/Product">
+          <q-icon size="1.5em" name="chevron_right" />Product</router-link
+        >
       </div>
     </nav>
-    <!-- <div class="sub-nav">
+    <div class="sub-nav">
       <div class="overlay"></div>
-      <div class="link">
+      <div class="link container">
         <router-link to="/Product">
           <img src="../assets/admin.svg" alt="" />
+          <span>product</span>
         </router-link>
       </div>
-    </div>-->
+    </div>
   </header>
 
   <router-view />
 </template>
 
-<script >
+<script>
 export default {
   setup() {
-    const toggle = () => {
-      console.log("yess");
+    const toggleMenu = () => {
+      console.log("hi");
     };
+
     return {
-      toggle,
+      toggleMenu,
     };
   },
 };
@@ -110,8 +117,9 @@ nav {
     color: #fff;
     padding: 5px 10px 4px 15px;
     border-right: 1px solid;
-    svg {
-      font-size: 18px;
+    i {
+      font-size: 20px;
+      cursor: pointer;
     }
   }
   .main-nav {
@@ -122,27 +130,50 @@ nav {
       margin-right: 10px;
     }
     a {
-      color: #fff;
+      color: #fff9;
       font-weight: bold;
       margin: 0 5px;
     }
+    a.active {
+      color: #fff;
+    }
   }
 }
-// .sub-nav {
-//   .overlay {
-//     position: fixed;
-//     background-color: #808080bf;
-//     top: 0;
-//     left: 0;
-//     width: 100%;
-//     height: 100%;
-//     z-index: 1;
-//   }
-//   .link {
-//     height: 30px;
-//     img {
-//       height: 100%;
-//     }
-//   }
-// }
+.sub-nav {
+  display: none;
+  z-index: 2;
+  position: relative;
+  .overlay {
+    position: fixed;
+    background-color: #808080bf;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  .link {
+    height: fit-content;
+    background-color: #fff;
+    z-index: 99999999;
+    position: relative;
+    margin-top: 8px;
+    border-radius: 5px;
+    padding: 3px 10px;
+    a {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding-left: 10px;
+      width: fit-content;
+      img {
+        height: 100%;
+        width: 28px;
+      }
+      span {
+        font-size: 12px;
+      }
+    }
+  }
+}
 </style>

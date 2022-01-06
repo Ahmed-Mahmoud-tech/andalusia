@@ -1,13 +1,25 @@
 <template>
+  <div class="q-pa-md q-gutter-sm">
+    <q-breadcrumbs class="text-brown">
+      <template v-slot:separator>
+        <q-icon size="1.5em" name="chevron_right" color="primary" />
+      </template>
+
+      <q-breadcrumbs-el label="Home" icon="home" />
+      <q-breadcrumbs-el label="product" icon="widgets" />
+      <!-- <q-breadcrumbs-el label="Breadcrumbs" icon="navigation" /> -->
+    </q-breadcrumbs>
+  </div>
+
   <h1 class="title container">Product</h1>
   <Multiselect
     :products="products"
     :resetTypeMultiSelect="resetTypeMultiSelect"
     :resetTypeSelect="resetTypeSelect"
+    :finalData="finalData"
     class="multi-select"
     @getProductsSelected="getProductsSelected"
   />
-  <q-icon name="list" />
   <Select
     :data="warehouses"
     theLable="warehouses"
@@ -19,6 +31,16 @@
     @changeData="changeType"
     :resetTypeSelect="resetTypeSelect"
   />
+  <div class="check-box">
+    <input
+      type="checkbox"
+      id="check"
+      name="check"
+      value="check"
+      @click="checkZeroFun"
+    />
+    <label for="check">show zero balance</label>
+  </div>
   <form
     action="
   "
@@ -79,6 +101,7 @@ export default {
     const resetTypeMultiSelect = ref(false);
     const radioValue = ref();
     const finalData = ref([]);
+    const checkZero = ref(false);
 
     onMounted(() => {
       warehouses.value = Object.keys(store.state.WHs);
@@ -107,11 +130,9 @@ export default {
     };
 
     const setRadioValue = () => {
-      console.log(document.querySelector(".multi-select"));
       document.getElementsByName("appearance").forEach((radio) => {
         if (radio.checked) {
           radioValue.value = radio.value;
-          console.log(radioValue.value);
         }
       });
       if (radioValue.value === "specificProducts") {
@@ -122,30 +143,41 @@ export default {
     };
 
     const getAllData = () => {
-      // console.log(productSelected.value);
-      console.log();
-      productSelected.value.map((p, i) => {
-        store.state.WHs[warehousSelected.value][typeSelected.value][i];
+      finalData.value = [];
+      if (radioValue.value === "specificProducts") {
+        store.state.WHs[warehousSelected.value][typeSelected.value].map(
+          (ty) => {
+            productSelected.value.map((p, i) => {
+              if (ty.product == p) {
+                finalData.value.push({
+                  product: p,
+                  onHand: ty.onHand,
+                  type: typeSelected.value,
+                });
+              }
+            });
+          }
+        );
+      } else {
+        store.state.WHs[warehousSelected.value][typeSelected.value].map(
+          (ty) => {
+            finalData.value.push({
+              product: ty.product,
+              onHand: ty.onHand,
+              type: typeSelected.value,
+            });
+          }
+        );
+      }
+      if (checkZero.value) {
+        finalData.value = finalData.value.filter((f) => {
+          return f.onHand != 0;
+        });
+      }
+    };
 
-        // console.log(
-        //   store.state.WHs[warehousSelected.value][typeSelected.value][i].product
-        // );
-        // console.log(p);
-        // console.log(i);
-        // if (
-        //   store.state.WHs[warehousSelected.value][typeSelected.value][i]
-        //     .product === p
-        // ) {
-        //   console.log(
-        //     p +
-        //       " ___________" +
-        //       store.state.WHs[warehousSelected.value][typeSelected.value][i]
-        //         .onHand +
-        //       "____________" +
-        //       typeSelected.value
-        //   );
-        // }
-      });
+    const checkZeroFun = (e) => {
+      checkZero.value = e.target.checked;
     };
 
     const getProductsSelected = (e) => {
@@ -166,6 +198,8 @@ export default {
       setRadioValue,
       getAllData,
       getProductsSelected,
+      finalData,
+      checkZeroFun,
     };
   },
 };

@@ -21,7 +21,7 @@ export default store(function (/* { ssrContext } */) {
           "type-one-1": [
             {
               product: "product-one-1-a",
-              onHand: 55,
+              onHand: 0,
             },
             {
               product: "product-one-1-b",
