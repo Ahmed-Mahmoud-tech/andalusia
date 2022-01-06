@@ -26,7 +26,7 @@
             onRequest({ pagination, filter: $event.target.value }, 'onHand')
           "
         />
-        <!-- 
+        <!--
         <input
           type="text"
           placeholder="iron"
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch, onUpdated } from "vue";
 import { useStore } from "vuex";
 
 const columns = [
@@ -137,7 +137,8 @@ const originalRowsold = [
 ];
 
 export default {
-  setup() {
+  props: ["finalData"],
+  setup(props) {
     const store = useStore();
     const rows = ref([]);
     const tableData = ref(store.state.WHs["WH_one"]["type-one-1"]);
@@ -152,7 +153,7 @@ export default {
       rowsNumber: 10,
     });
 
-    let originalRows = tableData.value;
+    let originalRows = ref([]);
 
     console.log(originalRows);
 
@@ -168,8 +169,10 @@ export default {
     ) => {
       console.log();
       const data = filter
-        ? originalRows.filter((row) => row[type].toString().includes(filter))
-        : originalRows.slice();
+        ? originalRows.value.filter((row) =>
+            row[type].toString().includes(filter)
+          )
+        : originalRows.value.slice();
 
       // handle sortBy
       if (sortBy) {
@@ -190,10 +193,10 @@ export default {
     // emulate 'SELECT count(*) FROM ...WHERE...'
     function getRowsNumberCount(filter) {
       if (!filter) {
-        return originalRows.length;
+        return originalRows.value.length;
       }
       let count = 0;
-      originalRows.forEach((treat) => {
+      originalRows.value.forEach((treat) => {
         if (treat.product.includes(filter)) {
           ++count;
         }
@@ -251,6 +254,24 @@ export default {
         filter: undefined,
       });
     });
+
+    watch(
+      () => props.finalData,
+      (first, second) => {
+        console.log(
+          "Watch props.selected function called with args:",
+          first,
+          second
+        );
+      }
+    );
+    watch(
+      () => props.finalData,
+      (first, second) => {
+        console.log("Watch props.selected function called with args:", first);
+        originalRows.value = first;
+      }
+    );
 
     return {
       filter,

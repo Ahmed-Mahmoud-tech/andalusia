@@ -1,82 +1,85 @@
 <template>
-  <div class="q-pa-md q-gutter-sm">
-    <q-breadcrumbs class="text-brown">
-      <template v-slot:separator>
-        <q-icon size="1.5em" name="chevron_right" color="primary" />
-      </template>
-
-      <q-breadcrumbs-el label="Home" icon="home" />
-      <q-breadcrumbs-el label="product" icon="widgets" />
-      <!-- <q-breadcrumbs-el label="Breadcrumbs" icon="navigation" /> -->
-    </q-breadcrumbs>
-  </div>
-
-  <h1 class="title container">Product</h1>
-  <Multiselect
-    :products="products"
-    :resetTypeMultiSelect="resetTypeMultiSelect"
-    :resetTypeSelect="resetTypeSelect"
-    :finalData="finalData"
-    class="multi-select"
-    @getProductsSelected="getProductsSelected"
-  />
-  <Select
-    :data="warehouses"
-    theLable="warehouses"
-    @changeData="changeWarehouse"
-  />
-  <Select
-    :data="types"
-    theLable="types"
-    @changeData="changeType"
-    :resetTypeSelect="resetTypeSelect"
-  />
-  <div class="check-box">
-    <input
-      type="checkbox"
-      id="check"
-      name="check"
-      value="check"
-      @click="checkZeroFun"
-    />
-    <label for="check">show zero balance</label>
-  </div>
-  <form
-    action="
-  "
-    class="radio"
-  >
-    <div class="radio">
-      <label for="all"></label>
-      <input
-        type="radio"
-        name="appearance"
-        id="all"
-        value="allProducts"
-        @click="setRadioValue"
-      />
+  <h3 class="title container">Product</h3>
+  <div class="product container">
+    <div class="product-content">
+      <div class="sec-title">
+        <q-icon size="1.5em" name="file_copy" />
+        <h3>basic information</h3>
+      </div>
+      <div class="product-first-row">
+        <div class="warehouses">
+          <label for="warehouses">warehouses</label>
+          <Select
+            id="warehouses"
+            :data="warehouses"
+            theLable="warehouses"
+            @changeData="changeWarehouse"
+          />
+        </div>
+        <div class="types">
+          <label for="types">types</label>
+          <Select
+            id="types"
+            :data="types"
+            theLable="types"
+            @changeData="changeType"
+            :resetTypeSelect="resetTypeSelect"
+          />
+        </div>
+        <div class="check-box">
+          <input
+            type="checkbox"
+            id="check"
+            name="check"
+            value="check"
+            @click="checkZeroFun"
+          />
+          <label for="check">show zero balance</label>
+        </div>
+      </div>
+      <div class="product-seconde-row">
+        <form action="" class="radio">
+          <div class="radio">
+            <label for="all">all products</label>
+            <input
+              type="radio"
+              name="appearance"
+              id="all"
+              value="allProducts"
+              @click="setRadioValue"
+            />
+          </div>
+          <div class="radio">
+            <label for="specific">specific products</label>
+            <input
+              type="radio"
+              name="appearance"
+              id="specific"
+              value="specificProducts"
+              @click="setRadioValue"
+            />
+          </div>
+        </form>
+        <Multiselect
+          :products="products"
+          :resetTypeMultiSelect="resetTypeMultiSelect"
+          :resetTypeSelect="resetTypeSelect"
+          class="multi-select"
+          @getProductsSelected="getProductsSelected"
+        />
+        <div class="search-button">
+          <q-btn
+            :ripple="{ center: true }"
+            color="secondary"
+            label="Search"
+            no-caps
+            @click="getAllData"
+          />
+        </div>
+      </div>
+      <Table :finalData="finalData" />
     </div>
-    <div class="radio">
-      <label for="specific"></label>
-      <input
-        type="radio"
-        name="appearance"
-        id="specific"
-        value="specificProducts"
-        @click="setRadioValue"
-      />
-    </div>
-  </form>
-
-  <q-btn
-    :ripple="{ center: true }"
-    color="secondary"
-    label="Search"
-    no-caps
-    @click="getAllData"
-  />
-
-  <Table />
+  </div>
 </template>
 
 <script>
@@ -206,33 +209,43 @@ export default {
 </script>
 
 <style lang="scss">
-// .title {
-//   margin-top: 10px;
-//   font-weight: bold;
-//   font-size: 18px;
-// }
-// .product {
-//   min-height: 80vh;
-//   background-color: #fff;
-//   margin-bottom: 10px;
-
-//   .product-content {
-//     padding: 20px 40px;
-//     .sec-title {
-//       border-bottom: 1px solid #eee;
-//       display: flex;
-//       align-items: center;
-//       padding-bottom: 10px;
-//       gap: 5px;
-//       h3 {
-//         font-size: 16px;
-//       }
-//       svg {
-//         color: aquamarine;
-//       }
-//     }
-//   }
-// }
+.title {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 18px;
+  height: 34px;
+}
+.product {
+  min-height: 80vh;
+  background-color: #fff;
+  margin-bottom: 10px;
+  .product-content {
+    padding: 20px 40px;
+    .sec-title {
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      padding-bottom: 10px;
+      gap: 5px;
+      h3 {
+        font-size: 16px;
+      }
+      i {
+        color: #71dfba;
+      }
+    }
+    .product-first-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding-top: 30px;
+    }
+    .product-seconde-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding-top: 30px;
+    }
+  }
+}
 .multi-select {
   visibility: hidden;
 }
