@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUpdated } from "vue";
 import { useStore } from "vuex";
 
 const columns = [
@@ -137,11 +137,11 @@ const originalRowsold = [
 ];
 
 export default {
-  setup() {
+  props: ["finalData", "realUpdate"],
+  setup(props) {
     const store = useStore();
     const rows = ref([]);
-    const tableData = ref(store.state.WHs["WH_one"]["type-one-1"]);
-
+    const realUpdateHere = ref(0);
     const filter = ref("");
     const loading = ref(false);
     const pagination = ref({
@@ -152,9 +152,9 @@ export default {
       rowsNumber: 10,
     });
 
+    const tableData = ref([]);
     let originalRows = tableData.value;
-
-    console.log(originalRows);
+    console.log(tableData.value);
 
     // emulate ajax call
     // SELECT * FROM ... WHERE...LIMIT...
@@ -243,6 +243,14 @@ export default {
         loading.value = false;
       }, 500);
     }
+
+    onUpdated(() => {
+      if (props.realUpdate == realUpdateHere.value && props.realUpdate != 0) {
+        // onRequest({ pagination });
+        realUpdateHere.value = props.realUpdate;
+      }
+      console.log("updated");
+    });
 
     onMounted(() => {
       // get initial data from server (1st page)

@@ -437,7 +437,18 @@ export default store(function (/* { ssrContext } */) {
             },
           ],
         }
-      }
+      },
+      finalData: []
+    },
+    mutations: {
+      serveData(state, payload) {
+        state.finalData = payload
+      },
+    },
+    actions: {
+      serveData({ commit }, payload) {
+        commit("serveData", payload)
+      },
     },
     modules: {
     },
