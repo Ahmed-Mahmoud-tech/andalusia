@@ -20,13 +20,14 @@ import { ref, onUpdated } from "vue";
 
 export default {
   props: ["products", "resetTypeMultiSelect", "resetTypeSelect"],
-  setup(props) {
+  setup(props, { emit }) {
     const modelSingle = ref("Apple");
     const modelMultiple = ref([]);
     const options = ref([props.products]);
     const firstInArray = ref("");
 
     let p = onUpdated(() => {
+      emit("getProductsSelected", modelMultiple.value);
       if (props.products) {
         options.value = props.products;
         if (firstInArray.value != props.products[0]) {
