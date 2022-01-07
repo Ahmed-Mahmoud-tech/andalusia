@@ -225,6 +225,8 @@ export default {
   margin-bottom: 10px;
   .product-content {
     padding: 20px 40px;
+    color: #666;
+
     .sec-title {
       border-bottom: 1px solid #eee;
       display: flex;
@@ -242,11 +244,50 @@ export default {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       padding-top: 30px;
+      .warehouses {
+        label {
+          text-transform: capitalize;
+          font-size: 12px;
+          color: #484887d1;
+        }
+      }
+      .types {
+        label {
+          text-transform: capitalize;
+          font-size: 12px;
+          color: #484887d1;
+        }
+      }
+      .check-box {
+        display: flex;
+        align-items: center;
+        input {
+          margin-right: 10px;
+        }
+        label {
+          text-transform: capitalize;
+          font-size: 12px;
+          color: #484887d1;
+        }
+      }
     }
     .product-seconde-row {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: auto 1fr auto;
       padding-top: 30px;
+      .radio {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-right: 20px;
+        max-width: 300px;
+        label {
+          text-transform: capitalize;
+          font-size: 12px;
+          color: #484887d1;
+          margin-right: 7px;
+        }
+      }
     }
   }
 }

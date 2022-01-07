@@ -24,11 +24,11 @@
       <div class="main-nav">
         <q-icon size="1.5em" name="home" />
 
-        <router-link to="/" class="active nav-links">
+        <router-link to="/" active-class="active">
           <q-icon size="1.5em" name="chevron_right" />Home</router-link
         >
 
-        <router-link to="/Product" class="nav-links">
+        <router-link to="/Product" active-class="active" id="product-link">
           <q-icon size="1.5em" name="chevron_right" />Product</router-link
         >
       </div>
@@ -53,13 +53,14 @@ import { useRouter, useRoute } from "vue-router";
 export default {
   setup() {
     const route = useRoute();
-    console.log(route.path);
     const toggleIndicator = ref(false);
+
+    console.log(document.getElementById("product-link"));
 
     const toggleMenu = () => {
       const toggleButton = document.querySelector(".sub-nav");
       console.log(document.querySelectorAll(".nav-links")[1]);
-      console.log(toggleButton);
+      console.log(toggleButton, toggleButton.value);
 
       if (toggleIndicator.value) {
         toggleButton.style.display = "none";
@@ -71,15 +72,14 @@ export default {
     };
     console.log(document.querySelectorAll("nav-links"));
     watch(() => {
-      if (route.path == "/Product") {
-        const homeLink = document.querySelectorAll(".nav-links")[0].classList;
-        // document
-        //   .querySelectorAll(".nav-links")[0]
-        //   .style.classList.remove("active");
-        console.log(homeLink);
-      } else {
-        // document.querySelectorAll(".nav-links")[1].classList.add("active");
-      }
+      const homeLink = document.querySelectorAll(".nav-links")[1];
+
+      // if (route.path == "/Product") {
+      //   // homeLink.classList.remove("active");
+      //   console.log(homeLink.classList);
+      // } else {
+      //   // homeLink.classList.add("active");
+      // }
     });
 
     return {
