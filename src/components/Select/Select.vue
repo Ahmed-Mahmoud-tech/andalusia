@@ -45,3 +45,22 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.q-pa-md {
+  padding: 16px 0;
+}
+.q-field__control.relative-position.row.no-wrap {
+  padding: 0 0 0 15px;
+}
+.q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip {
+  width: 47px;
+  padding: 12px;
+  background-color: #8bc1df36;
+}
+.q-field__label.no-pointer-events.absolute.ellipsis {
+  padding-left: 20px;
+}
+.q-field__control-container.col.relative-position.row.no-wrap.q-anchor--skip {
+  background-color: #d3e7f33b;
+}
+</style>
