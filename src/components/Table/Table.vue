@@ -126,10 +126,10 @@ export default {
     // emulate 'SELECT count(*) FROM ...WHERE...'
     function getRowsNumberCount(filter) {
       if (!filter) {
-        return originalRows.value.length;
+        return originalRows.length;
       }
       let count = 0;
-      originalRows.value.forEach((treat) => {
+      originalRows.forEach((treat) => {
         if (treat.product.includes(filter)) {
           ++count;
         }
