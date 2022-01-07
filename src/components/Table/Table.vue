@@ -26,14 +26,14 @@
             onRequest({ pagination, filter: $event.target.value }, 'onHand')
           "
         />
-        <!-- 
+
         <input
           type="text"
-          placeholder="iron"
+          placeholder="type"
           @keyup="
             onRequest({ pagination, filter: $event.target.value }, 'type')
           "
-        /> -->
+        />
       </template>
     </q-table>
   </div>
@@ -59,80 +59,11 @@ const columns = [
     field: "onHand",
     align: "left",
   },
-  // {
-  //   name: "type",
-  //   label: "type",
-  //   field: "type",
-  //   align: "left",
-  // },
-];
-
-const originalRowsold = [
   {
-    id: 1,
-    name: "Frozen Yogurt",
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: "14%",
-    iron: "1%",
-  },
-  {
-    id: 2,
-    name: "Ice cream sandwich",
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: "8%",
-    iron: "1%",
-  },
-  {
-    id: 3,
-    name: "Eclair",
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: "9%",
-    iron: "7%",
-  },
-  {
-    id: 4,
-    name: "Cupcake",
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: "3%",
-    iron: "8%",
-  },
-  {
-    id: 5,
-    name: "Gingerbread",
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: "7%",
-    iron: "16%",
-  },
-  {
-    id: 6,
-    name: "Jelly bean",
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: "0%",
-    iron: "0%",
+    name: "type",
+    label: "type",
+    field: "type",
+    align: "left",
   },
 ];
 
@@ -154,7 +85,7 @@ export default {
 
     const tableData = ref([]);
     let originalRows = tableData.value;
-    console.log(tableData.value);
+    let pageNumber = ref(0);
 
     // emulate ajax call
     // SELECT * FROM ... WHERE...LIMIT...
@@ -162,18 +93,15 @@ export default {
       startRow,
       count,
       filter,
-      sortBy,
-      descending,
+      sortBy = "product",
+      descending = false,
       type
     ) => {
-      console.log("originalowsxxxxxxxxxx", type);
       const data = filter
         ? originalRows.filter((row) => {
-            console.log(filter);
             return row[type].toString().includes(filter);
           })
         : originalRows.slice();
-      console.log("originalowsxxxxxxxxxx", data);
 
       // handle sortBy
       if (sortBy) {
@@ -187,12 +115,8 @@ export default {
             : (a, b) => parseFloat(a[sortBy]) - parseFloat(b[sortBy]);
         data.sort(sortFn);
       }
-      console.log("data", data);
-      console.log("startRow", startRow, count);
 
       if (count) {
-        console.log("startRow", startRow, count);
-
         return data.slice(startRow, startRow + count);
       } else {
         return data.slice(0, 5);
@@ -215,7 +139,7 @@ export default {
     }
 
     function onRequest(props, type = "product") {
-      const { page, rowsPerPage, sortBy, descending } = props.pagination;
+      let { page, rowsPerPage, sortBy, descending } = props.pagination;
       let filter;
       if (typeof props.filter == "string") {
         filter = props.filter;
@@ -230,11 +154,18 @@ export default {
         pagination.value.rowsNumber = getRowsNumberCount(filter);
 
         // get all rows if "All" (0) is selected
-        const fetchCount =
+        let fetchCount =
           rowsPerPage === 0 ? pagination.value.rowsNumber : rowsPerPage;
 
         // calculate starting row of data
-        const startRow = (page - 1) * rowsPerPage;
+        let startRow = (page - 1) * rowsPerPage;
+        if (!page) {
+          page = 1;
+          startRow = 0;
+          (fetchCount = 5), (filter = "");
+          rowsPerPage = 5;
+        }
+        pageNumber.value = page;
 
         // fetch data from "server"
         const returnedData = fetchFromServer(
@@ -263,13 +194,11 @@ export default {
     onUpdated(() => {
       if (props.realUpdate == realUpdateHere.value && props.realUpdate != 0) {
         originalRows = props.finalData;
-        console.log(originalRows);
         setTimeout(() => {
           onRequest({ pagination, filter });
         }, 1000);
         realUpdateHere.value++;
       }
-      console.log(props.realUpdate);
     });
 
     onMounted(() => {
@@ -289,22 +218,14 @@ export default {
       tableData,
       fetchFromServer,
       onRequest,
+      pageNumber,
     };
   },
 };
 </script>
 
-<style>
-/* .q-table__control:nth-child(2),
-span.q-table__bottom-item {
-  display: none !important;
-}
-
-.q-table__bottom .q-table__control {
-  width: 100%;
-} */
-
-/* .q-table__bottom .q-table__separator {
+<style lang="scss">
+.q-table__bottom .q-table__separator {
   display: none;
 }
 
@@ -332,6 +253,7 @@ span.q-table__bottom-item {
 }
 
 .q-table__control:nth-child(3) span.q-table__bottom-item:after {
-  content: " items";
-} */
+  // content: " items";
+  content: v-bind(pageNumber);
+}
 </style>
