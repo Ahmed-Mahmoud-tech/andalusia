@@ -27,6 +27,7 @@ html {
   padding: 0;
   font-size: 14px;
   font-weight: 400;
+  background-color: #eaf5f1;
 }
 #app {
   font-family: "Karla", sans-serif;

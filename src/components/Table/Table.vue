@@ -26,7 +26,6 @@
             onRequest({ pagination, filter: $event.target.value }, 'onHand')
           "
         />
-
         <input
           type="text"
           placeholder="type"
@@ -40,7 +39,7 @@
 </template>
 
 <script>
-import { ref, onMounted, onUpdated } from "vue";
+import { ref, onMounted, watch, onUpdated } from "vue";
 import { useStore } from "vuex";
 
 const columns = [
@@ -127,10 +126,10 @@ export default {
     // emulate 'SELECT count(*) FROM ...WHERE...'
     function getRowsNumberCount(filter) {
       if (!filter) {
-        return originalRows.length;
+        return originalRows.value.length;
       }
       let count = 0;
-      originalRows.forEach((treat) => {
+      originalRows.value.forEach((treat) => {
         if (treat.product.includes(filter)) {
           ++count;
         }
@@ -208,6 +207,24 @@ export default {
         filter: undefined,
       });
     });
+
+    watch(
+      () => props.finalData,
+      (first, second) => {
+        console.log(
+          "Watch props.selected function called with args:",
+          first,
+          second
+        );
+      }
+    );
+    watch(
+      () => props.finalData,
+      (first, second) => {
+        console.log("Watch props.selected function called with args:", first);
+        originalRows.value = first;
+      }
+    );
 
     return {
       filter,

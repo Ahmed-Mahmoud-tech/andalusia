@@ -24,16 +24,16 @@
       <div class="main-nav">
         <q-icon size="1.5em" name="home" />
 
-        <router-link to="/" class="active">
+        <router-link to="/" class="active nav-links">
           <q-icon size="1.5em" name="chevron_right" />Home</router-link
         >
 
-        <router-link to="/Product">
+        <router-link to="/Product" class="nav-links">
           <q-icon size="1.5em" name="chevron_right" />Product</router-link
         >
       </div>
     </nav>
-    <div class="sub-nav">
+    <div class="sub-nav container">
       <div class="overlay"></div>
       <div class="link container">
         <router-link to="/Product">
@@ -48,11 +48,37 @@
 </template>
 
 <script>
+import { ref, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 export default {
   setup() {
+    const route = useRoute();
+    console.log(route.path);
+    const toggleIndicator = ref(false);
     const toggleMenu = () => {
-      console.log("hi");
+      const toggleButton = document.querySelector(".sub-nav");
+      console.log(toggleIndicator.value);
+
+      if (toggleIndicator.value) {
+        toggleButton.style.display = "none";
+        toggleIndicator.value = false;
+      } else if (!toggleIndicator.value) {
+        toggleButton.style.display = "block";
+        toggleIndicator.value = true;
+      }
     };
+    console.log(document.querySelectorAll("nav-links"));
+    watch(() => {
+      // if (route.path == "/Product") {
+      //   document
+      //     .getElementsByClassName("nav-links")[0]
+      //     .classList.remove("active");
+      // } else {
+      //   document
+      //     .getElementsByClassName("nav-links")[0]
+      //     .classList.add("active");
+      // }
+    });
 
     return {
       toggleMenu,
@@ -141,7 +167,7 @@ nav {
 }
 .sub-nav {
   display: none;
-  z-index: 2;
+  z-index: 1;
   position: relative;
   .overlay {
     position: fixed;
@@ -155,11 +181,11 @@ nav {
   .link {
     height: fit-content;
     background-color: #fff;
-    z-index: 99999999;
     position: relative;
     margin-top: 8px;
     border-radius: 5px;
     padding: 3px 10px;
+    z-index: 9;
     a {
       display: flex;
       flex-direction: column;
