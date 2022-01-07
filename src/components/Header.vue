@@ -5,9 +5,18 @@
         <div class="logo">
           <img src="../assets/logo.png" alt />
         </div>
+        <div class="search-sec">
+          <input
+            type="text"
+            placeholder="search for patient (name, code, phone number)"
+          />
+          <div class="magnifying">
+            <q-icon name="search" />
+          </div>
+        </div>
         <div class="lang">
           English
-          <font-awesome-icon :icon="['fas', 'sort-down']" />
+          <q-icon name="arrow_drop_down" />
         </div>
       </div>
       <div class="intro-r">
@@ -24,12 +33,21 @@
       <div class="main-nav">
         <q-icon size="1.5em" name="home" />
 
-        <router-link to="/" active-class="active">
+        <router-link to="/" class="route__link" active-class="active">
           <q-icon size="1.5em" name="chevron_right" />Home</router-link
         >
 
-        <router-link to="/Product" active-class="active" id="product-link">
-          <q-icon size="1.5em" name="chevron_right" />Product</router-link
+        <router-link
+          to="/Product"
+          id="product-link"
+          class="route__link"
+          active-class="active"
+        >
+          <q-icon
+            size="1.5em"
+            name="chevron_right"
+            ref="productSelector"
+          />Product</router-link
         >
       </div>
     </nav>
@@ -48,14 +66,14 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 export default {
   setup() {
     const route = useRoute();
     const toggleIndicator = ref(false);
-
-    console.log(document.getElementById("product-link"));
+    const homeSelector = ref(null);
+    const productSelector = ref(null);
 
     const toggleMenu = () => {
       const toggleButton = document.querySelector(".sub-nav");
@@ -70,26 +88,21 @@ export default {
         toggleIndicator.value = true;
       }
     };
-    console.log(document.querySelectorAll("nav-links"));
-    watch(() => {
-      const homeLink = document.querySelectorAll(".nav-links")[1];
-
-      // if (route.path == "/Product") {
-      //   // homeLink.classList.remove("active");
-      //   console.log(homeLink.classList);
-      // } else {
-      //   // homeLink.classList.add("active");
-      // }
-    });
 
     return {
       toggleMenu,
+      homeSelector,
+      productSelector,
     };
   },
 };
 </script>
 
 <style lang="scss">
+header {
+  position: relative;
+  z-index: 4;
+}
 .intro {
   position: relative;
   margin-bottom: 5px;
@@ -103,11 +116,36 @@ export default {
     justify-content: space-between;
     width: 85%;
     padding-right: 5px;
-
     .logo {
-      width: 200px;
+      width: 130px;
       img {
         width: 100%;
+      }
+    }
+    .search-sec {
+      margin-top: 5px;
+      margin-right: auto;
+      margin-left: 22px;
+      input {
+        width: 350px;
+        height: 25px;
+        border: none;
+        border-right: 2px solid darkblue;
+        background: #f5f7f9;
+        border-radius: 5px 0 0 5px;
+        outline: none;
+        padding: 2px 20px;
+      }
+      .magnifying {
+        display: inline-block;
+        background: #f5f7f9;
+        border-radius: 0 5px 5px 0;
+        height: 25px;
+        padding: 2px 7px;
+        i {
+          font-weight: 900;
+          color: darkblue;
+        }
       }
     }
     .lang {
@@ -126,7 +164,7 @@ export default {
     .user {
       display: flex;
       align-items: center;
-      transform: translateY(10px);
+      transform: translateY(2px);
       .name {
         font-size: 11px;
         padding-left: 7px;

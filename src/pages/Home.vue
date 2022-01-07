@@ -18,19 +18,20 @@ export default {
 <style lang="scss">
 .home {
   background-color: #fff;
-  min-height: 80vh;
+  min-height: 79vh;
   margin-top: 10px;
   margin-bottom: 10px;
   overflow: hidden;
   position: relative;
   .layer {
     position: absolute;
-    background-color: #eaf5f185;
+    background-color: #d7e4f15e;
     top: 19%;
-    left: -10%;
+    left: 50%;
     width: 1800px;
     height: 1200px;
     border-radius: 50%;
+    transform: translateX(-50%);
   }
   .home-content {
     position: relative;
@@ -63,5 +64,9 @@ a.router-link-active.router-link-exact-active.active.nav-links + * {
 
 .inputscont {
   background: #f5f7f9;
+}
+
+a.active.router-link-exact-active + * {
+  display: none;
 }
 </style>

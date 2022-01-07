@@ -1,4 +1,8 @@
 <template>
+  <div class="sec-title">
+    <q-icon size="1.5em" name="file_open" />
+    <h3>products details</h3>
+  </div>
   <div class="q-pa-md">
     <q-table
       title="Treats"
@@ -18,7 +22,7 @@
           </div>
         </div>
         <div class="inputscont">
-          <div class="flexrow">
+          <div class="flexrow" ref="inputscont">
             <input
               type="text"
               @keyup="
@@ -27,6 +31,7 @@
                   'product'
                 )
               "
+              @focus="resetInputs"
             />
             <q-icon size="1.5em" name="search" />
             <input
@@ -34,6 +39,7 @@
               @keyup="
                 onRequest({ pagination, filter: $event.target.value }, 'onHand')
               "
+              @focus="resetInputs"
             />
             <q-icon size="1.5em" name="search" />
 
@@ -42,6 +48,7 @@
               @keyup="
                 onRequest({ pagination, filter: $event.target.value }, 'type')
               "
+              @focus="resetInputs"
             />
             <q-icon size="1.5em" name="search" />
           </div>
@@ -52,7 +59,7 @@
 </template>
 
 <script>
-import { ref, onMounted, watch, onUpdated } from "vue";
+import { ref, onMounted, watch, onUpdated, computed } from "vue";
 import { useStore } from "vuex";
 
 const columns = [
@@ -87,6 +94,7 @@ export default {
     const realUpdateHere = ref(1);
     const filter = ref("");
     const loading = ref(false);
+    const inputscont = ref(null);
     const pagination = ref({
       sortBy: "product",
       descending: false,
@@ -98,6 +106,13 @@ export default {
     const tableData = ref([]);
     let originalRows = tableData.value;
     let pageNumber = ref(0);
+
+    const resetInputs = (e) => {
+      let childArray = inputscont.value.children;
+      [...childArray].map((child) => {
+        child.value = "";
+      });
+    };
 
     // emulate ajax call
     // SELECT * FROM ... WHERE...LIMIT...
@@ -206,9 +221,9 @@ export default {
     onUpdated(() => {
       if (props.realUpdate == realUpdateHere.value && props.realUpdate != 0) {
         originalRows = props.finalData;
-        setTimeout(() => {
-          onRequest({ pagination, filter });
-        }, 1000);
+        // setTimeout(() => {
+        onRequest({ pagination, filter });
+        // }, 1000);
         realUpdateHere.value++;
       }
     });
@@ -249,6 +264,8 @@ export default {
       fetchFromServer,
       onRequest,
       pageNumber,
+      inputscont,
+      resetInputs,
     };
   },
 };
@@ -351,9 +368,10 @@ td {
   height: 25px;
   border: 1px solid #c7c7c7;
   border-radius: 4px;
-  padding: 10px px;
+  padding: 5px;
   z-index: 2;
   background: #ffffffb8;
+  outline: none;
 }
 
 .flexrow span {
@@ -377,5 +395,32 @@ td {
   padding: 4px 14px 4px 16px;
   font-size: 10px;
   background: #f5f7f9;
+}
+
+.q-table__bottom.row.items-center.justify-end
+  .q-field__control.relative-position.row.no-wrap {
+  background: #f5f7f9;
+}
+.q-table__bottom.row.items-center.justify-end
+  .q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip {
+  background: unset;
+}
+
+.q-table__bottom.row.items-center .q-field__native.row.items-center {
+  padding-top: 3px;
+}
+
+.q-table__bottom.row.items-center.justify-end
+  .q-field__control.relative-position.row.no-wrap.text-grey-8 {
+  font-size: 14px;
+  border: 1px solid;
+  height: 24px;
+  padding-left: 6px;
+  background-color: white;
+  border-color: #d7e4f1;
+}
+
+.q-table__container.q-table--horizontal-separator.column.no-wrap.q-table__card.q-table--no-wrap {
+  margin-top: 30px;
 }
 </style>

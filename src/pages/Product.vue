@@ -8,16 +8,19 @@
       </div>
       <div class="product-first-row">
         <div class="warehouses">
-          <label for="warehouses">warehouses</label>
+          <label for="warehouses"
+            >warehouses <span class="astric">*</span></label
+          >
           <Select
             id="warehouses"
             :data="warehouses"
             theLable="warehouses"
             @changeData="changeWarehouse"
           />
+          <span class="message"> this fild is required </span>
         </div>
         <div class="types">
-          <label for="types">types</label>
+          <label for="types">types <span class="astric">*</span></label>
           <Select
             id="types"
             :data="types"
@@ -25,6 +28,7 @@
             @changeData="changeType"
             :resetTypeSelect="resetTypeSelect"
           />
+          <span class="message"> this fild is required </span>
         </div>
         <div class="check-box">
           <input
@@ -38,43 +42,53 @@
         </div>
       </div>
       <div class="product-seconde-row">
-        <form action="" class="radio">
-          <div class="radio">
-            <label for="all">all products</label>
-            <input
-              type="radio"
-              name="appearance"
-              id="all"
-              value="allProducts"
-              @click="setRadioValue"
-            />
-          </div>
-          <div class="radio">
-            <label for="specific">specific products</label>
-            <input
-              type="radio"
-              name="appearance"
-              id="specific"
-              value="specificProducts"
-              @click="setRadioValue"
-            />
-          </div>
-        </form>
-        <Multiselect
-          :products="products"
-          :resetTypeMultiSelect="resetTypeMultiSelect"
-          :resetTypeSelect="resetTypeSelect"
-          class="multi-select"
-          @getProductsSelected="getProductsSelected"
-        />
+        <div class="radio-container">
+          <span class="radio-title">product classification</span>
+          <form action="" class="radio">
+            <div class="radio-sec">
+              <input
+                type="radio"
+                name="appearance"
+                id="all"
+                value="allProducts"
+                @click="setRadioValue"
+              />
+              <label for="all">all products</label>
+            </div>
+            <div class="radio-sec">
+              <input
+                type="radio"
+                name="appearance"
+                id="specific"
+                value="specificProducts"
+                @click="setRadioValue"
+              />
+              <label for="specific">specific products</label>
+            </div>
+          </form>
+        </div>
+
+        <div class="multi-select">
+          <label for="types">product <span class="astric">*</span></label>
+          <Multiselect
+            :products="products"
+            :resetTypeMultiSelect="resetTypeMultiSelect"
+            :resetTypeSelect="resetTypeSelect"
+            class=""
+            @getProductsSelected="getProductsSelected"
+          />
+          <span class="message"> this fild is required </span>
+        </div>
+
         <div class="search-button">
-          <q-btn
+          <button @click="getAllData">Search</button>
+          <!-- <q-btn
             :ripple="{ center: true }"
             color="secondary"
             label="Search"
             no-caps
-            @click="getAllData"
-          />
+           
+          /> -->
         </div>
       </div>
       <Table :finalData="finalData" :realUpdate="realUpdate" />
@@ -102,7 +116,7 @@ export default {
     const productSelected = ref([]);
     const resetTypeSelect = ref(false);
     const resetTypeMultiSelect = ref(false);
-    const radioValue = ref();
+    const radioValue = ref("allProducts");
     const finalData = ref([]);
     const realUpdate = ref(0);
     const checkZero = ref(false);
@@ -145,11 +159,40 @@ export default {
         document.querySelector(".multi-select").style.visibility = "hidden";
       }
     };
-
+    const required = () => {
+      if (!warehousSelected.value) {
+        document.querySelector(" .warehouses .message").style.opacity = 1;
+        setTimeout(() => {
+          document.querySelector(" .warehouses .message").style.opacity = 0;
+        }, 2000);
+      } else if (
+        (warehousSelected.value && typeSelected.value == " ") ||
+        !typeSelected.value
+      ) {
+        document.querySelector(" .types .message").style.opacity = 1;
+        document.querySelector(" .warehouses .message").style.opacity = 0;
+        setTimeout(() => {
+          document.querySelector(" .types .message").style.opacity = 0;
+        }, 2000);
+      }
+      if (
+        warehousSelected.value &&
+        typeSelected.value &&
+        typeSelected.value != " " &&
+        radioValue.value == "specificProducts" &&
+        productSelected.value.length == "0"
+      ) {
+        document.querySelector(".multi-select .message").style.opacity = 1;
+        setTimeout(() => {
+          document.querySelector(".multi-select .message").style.opacity = 0;
+        }, 2000);
+      }
+    };
     const getAllData = () => {
+      required();
       finalData.value = [];
       if (radioValue.value === "specificProducts") {
-        store.state.WHs[warehousSelected.value][typeSelected.value].map(
+        store.state.WHs[warehousSelected.value][typeSelected.value]?.map(
           (ty) => {
             productSelected.value.map((p, i) => {
               if (ty.product == p) {
@@ -163,15 +206,17 @@ export default {
           }
         );
       } else {
-        store.state.WHs[warehousSelected.value][typeSelected.value].map(
-          (ty) => {
-            finalData.value.push({
-              product: ty.product,
-              onHand: ty.onHand,
-              type: typeSelected.value,
-            });
-          }
-        );
+        store.state.WHs[warehousSelected.value]
+          ? store.state.WHs[warehousSelected.value][typeSelected.value].map(
+              (ty) => {
+                finalData.value.push({
+                  product: ty.product,
+                  onHand: ty.onHand,
+                  type: typeSelected.value,
+                });
+              }
+            )
+          : null;
       }
       if (checkZero.value) {
         finalData.value = finalData.value.filter((f) => {
@@ -214,7 +259,6 @@ export default {
 
 <style lang="scss">
 .title {
-  margin-top: 10px;
   font-weight: bold;
   font-size: 18px;
   height: 34px;
@@ -224,20 +268,25 @@ export default {
   background-color: #fff;
   margin-bottom: 10px;
   .product-content {
-    padding: 20px 40px;
+    padding: 0px 40px 20px;
+
     color: #666;
 
     .sec-title {
       border-bottom: 1px solid #eee;
       display: flex;
       align-items: center;
-      padding-bottom: 10px;
+      text-transform: capitalize;
+
       gap: 5px;
       h3 {
         font-size: 16px;
+        font-weight: 700;
+        line-height: 30px;
+        padding-top: 10px;
       }
       i {
-        color: #71dfba;
+        color: #3ce9ee;
       }
     }
     .product-first-row {
@@ -249,6 +298,11 @@ export default {
           text-transform: capitalize;
           font-size: 12px;
           color: #484887d1;
+          font-weight: 500;
+
+          span.astric {
+            color: red;
+          }
         }
       }
       .types {
@@ -256,6 +310,9 @@ export default {
           text-transform: capitalize;
           font-size: 12px;
           color: #484887d1;
+          span.astric {
+            color: red;
+          }
         }
       }
       .check-box {
@@ -268,35 +325,84 @@ export default {
           text-transform: capitalize;
           font-size: 12px;
           color: #484887d1;
+          font-weight: 500;
         }
       }
     }
     .product-seconde-row {
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: 1fr 1fr 1fr;
       padding-top: 30px;
-      .radio {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-right: 20px;
-        max-width: 300px;
+      .radio-container {
+        .radio-title {
+          text-transform: capitalize;
+          font-size: 12px;
+          color: #484887d1;
+          font-weight: 500;
+          margin-bottom: 12px;
+          display: block;
+        }
+        .radio {
+          display: flex;
+          justify-content: space-between;
+          margin-right: 60px;
+          .radio-sec {
+            display: flex;
+            align-items: center;
+
+            justify-content: flex-start;
+            label {
+              text-transform: capitalize;
+              font-size: 12px;
+              color: #484887d1;
+            }
+            input {
+              margin-right: 7px;
+            }
+          }
+        }
+      }
+      .multi-select {
+        visibility: hidden;
         label {
           text-transform: capitalize;
           font-size: 12px;
           color: #484887d1;
-          margin-right: 7px;
+          span.astric {
+            color: red;
+          }
+        }
+      }
+      .search-button {
+        display: flex;
+        align-items: end;
+        justify-content: right;
+        button {
+          border: 1px solid #eee;
+          border-radius: 4px;
+          width: 90px;
+          color: #fff;
+          background-color: #3ce9ee;
+          padding: 3px;
+          height: 29px;
+          cursor: pointer;
         }
       }
     }
   }
 }
-.multi-select {
-  visibility: hidden;
+.message {
+  color: red;
+  text-transform: capitalize;
+  font-size: 12px;
+  opacity: 0;
+  transition: 0.3s;
 }
-
 .q-table__bottom .q-table__control {
   max-height: 25px;
   min-height: unset;
+}
+.q-pa-md {
+  padding: 4px 0;
 }
 </style>

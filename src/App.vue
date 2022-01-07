@@ -27,7 +27,7 @@ html {
   padding: 0;
   font-size: 14px;
   font-weight: 400;
-  background-color: #eaf5f1;
+  background-color: #d7e4f178;
 }
 #app {
   font-family: "Karla", sans-serif;
@@ -36,7 +36,7 @@ html {
   color: rgb(54, 54, 54);
   padding: 0;
   margin: 0;
-  background-color: #eaf5f1;
+  background-color: #d7e4f1;
   min-height: 100vh;
 }
 a {
