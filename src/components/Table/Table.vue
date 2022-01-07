@@ -28,18 +28,22 @@
                 )
               "
             />
+            <q-icon size="1.5em" name="search" />
             <input
               type="text"
               @keyup="
                 onRequest({ pagination, filter: $event.target.value }, 'onHand')
               "
             />
+            <q-icon size="1.5em" name="search" />
+
             <input
               type="text"
               @keyup="
                 onRequest({ pagination, filter: $event.target.value }, 'type')
               "
             />
+            <q-icon size="1.5em" name="search" />
           </div>
         </div>
       </template>
@@ -296,6 +300,7 @@ thead,
 }
 .q-table__bottom.row.items-center.q-table__bottom--nodata {
   color: transparent;
+  background-color: transparent;
   text-align: center;
   width: 50%;
   min-height: 100px;
@@ -335,20 +340,42 @@ thead,
   justify-content: space-between;
   padding: 0px 1.5%;
   text-align: left;
+  width: 100%;
 }
 td {
-  width: 35%;
+  width: 30%;
+  height: 20px !important;
 }
-
 .flexrow input[type="text"] {
   width: 28%;
-  height: 22px;
+  height: 25px;
   border: 1px solid #c7c7c7;
   border-radius: 4px;
-  padding: 10px;
+  padding: 10px px;
+  z-index: 2;
+  background: #ffffffb8;
 }
 
 .flexrow span {
-  width: 28%;
+  width: 32%;
+}
+.flexrow i {
+  top: 2px;
+  position: relative;
+  right: 4.5%;
+  color: #020202;
+  z-index: 1;
+}
+
+.inputscont {
+  background: #f5f7f9;
+  padding-bottom: 8px !important;
+}
+
+.q-table__bottom {
+  min-height: 33px;
+  padding: 4px 14px 4px 16px;
+  font-size: 10px;
+  background: #f5f7f9;
 }
 </style>

@@ -55,4 +55,13 @@ export default {
 a.router-link-active.router-link-exact-active.active.nav-links + * {
   display: none;
 }
+
+.tableheader {
+  font-size: 12px;
+  background: #d7e4f1;
+}
+
+.inputscont {
+  background: #f5f7f9;
+}
 </style>
