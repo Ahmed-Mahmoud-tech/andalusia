@@ -53,14 +53,35 @@ export default {
   padding: 0 0 0 15px;
 }
 .q-field__append.q-field__marginal.row.no-wrap.items-center.q-anchor--skip {
-  width: 47px;
+  width: 30px;
   padding: 12px;
   background-color: #8bc1df36;
+  padding-left: 3px;
 }
 .q-field__label.no-pointer-events.absolute.ellipsis {
   padding-left: 20px;
 }
-.q-field__control-container.col.relative-position.row.no-wrap.q-anchor--skip {
-  background-color: #d3e7f33b;
+
+.q-field--focused .q-field__label.no-pointer-events.absolute.ellipsis,
+.q-field--float .q-field__label.no-pointer-events.absolute.ellipsis {
+  display: none;
+}
+
+.q-field__control.relative-position.row.no-wrap {
+  background: #f5f7f9;
+}
+.q-field__control.relative-position.row.no-wrap,
+.q-field__control.relative-position.row.no-wrap * {
+  min-height: unset;
+  max-height: 30px;
+}
+.q-field--auto-height.q-field--labeled .q-field__control-container {
+  padding-top: 7px;
+}
+.q-field__label {
+  left: 0;
+  font-size: 12px !important;
+  top: 5px;
+  padding-left: 2px !important;
 }
 </style>
