@@ -77,7 +77,7 @@
           />
         </div>
       </div>
-      <Table :finalData="finalData" />
+      <Table :finalData="finalData" :realUpdate="realUpdate" />
     </div>
   </div>
 </template>
@@ -104,6 +104,7 @@ export default {
     const resetTypeMultiSelect = ref(false);
     const radioValue = ref();
     const finalData = ref([]);
+    const realUpdate = ref(0);
     const checkZero = ref(false);
 
     onMounted(() => {
@@ -177,6 +178,8 @@ export default {
           return f.onHand != 0;
         });
       }
+      // store.dispatch("serveData", finalData);
+      realUpdateHere.value++;
     };
 
     const checkZeroFun = (e) => {
@@ -202,6 +205,7 @@ export default {
       getAllData,
       getProductsSelected,
       finalData,
+      realUpdate,
       checkZeroFun,
     };
   },
