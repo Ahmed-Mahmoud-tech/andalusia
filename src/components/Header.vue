@@ -33,7 +33,7 @@
         >
       </div>
     </nav>
-    <div class="sub-nav container">
+    <div class="sub-nav container" @click="toggleMenu">
       <div class="overlay"></div>
       <div class="link container">
         <router-link to="/Product">
@@ -55,9 +55,11 @@ export default {
     const route = useRoute();
     console.log(route.path);
     const toggleIndicator = ref(false);
+
     const toggleMenu = () => {
       const toggleButton = document.querySelector(".sub-nav");
-      console.log(toggleIndicator.value);
+      console.log(document.querySelectorAll(".nav-links")[1]);
+      console.log(toggleButton);
 
       if (toggleIndicator.value) {
         toggleButton.style.display = "none";
@@ -69,15 +71,15 @@ export default {
     };
     console.log(document.querySelectorAll("nav-links"));
     watch(() => {
-      // if (route.path == "/Product") {
-      //   document
-      //     .getElementsByClassName("nav-links")[0]
-      //     .classList.remove("active");
-      // } else {
-      //   document
-      //     .getElementsByClassName("nav-links")[0]
-      //     .classList.add("active");
-      // }
+      if (route.path == "/Product") {
+        const homeLink = document.querySelectorAll(".nav-links")[0].classList;
+        // document
+        //   .querySelectorAll(".nav-links")[0]
+        //   .style.classList.remove("active");
+        console.log(homeLink);
+      } else {
+        // document.querySelectorAll(".nav-links")[1].classList.add("active");
+      }
     });
 
     return {

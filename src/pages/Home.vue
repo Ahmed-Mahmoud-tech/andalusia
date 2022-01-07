@@ -34,7 +34,6 @@ export default {
   }
   .home-content {
     position: relative;
-    z-index: 2;
     display: flex;
     flex-direction: column;
     text-align: center;
