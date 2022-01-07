@@ -72,7 +72,8 @@ export default {
     console.log(document.querySelectorAll("nav-links"));
     watch(() => {
       if (route.path == "/Product") {
-        const homeLink = document.querySelectorAll(".nav-links")[0].classList;
+        const homeLink = document.querySelectorAll(".nav-links");
+        // const homeLink = document.querySelectorAll(".nav-links")[0].classList;
         // document
         //   .querySelectorAll(".nav-links")[0]
         //   .style.classList.remove("active");

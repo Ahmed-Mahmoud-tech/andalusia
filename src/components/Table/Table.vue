@@ -12,27 +12,36 @@
       binary-state-sort
     >
       <template v-slot:top-right>
-        <input
-          type="text"
-          placeholder="product"
-          @keyup="
-            onRequest({ pagination, filter: $event.target.value }, 'product')
-          "
-        />
-        <input
-          type="text"
-          placeholder="onHand"
-          @keyup="
-            onRequest({ pagination, filter: $event.target.value }, 'onHand')
-          "
-        />
-        <input
-          type="text"
-          placeholder="type"
-          @keyup="
-            onRequest({ pagination, filter: $event.target.value }, 'type')
-          "
-        />
+        <div class="tableheader">
+          <div class="flexrow">
+            <span> Product </span> <span> on-Hand </span> <span> Type </span>
+          </div>
+        </div>
+        <div class="inputscont">
+          <div class="flexrow">
+            <input
+              type="text"
+              @keyup="
+                onRequest(
+                  { pagination, filter: $event.target.value },
+                  'product'
+                )
+              "
+            />
+            <input
+              type="text"
+              @keyup="
+                onRequest({ pagination, filter: $event.target.value }, 'onHand')
+              "
+            />
+            <input
+              type="text"
+              @keyup="
+                onRequest({ pagination, filter: $event.target.value }, 'type')
+              "
+            />
+          </div>
+        </div>
       </template>
     </q-table>
   </div>
@@ -251,7 +260,10 @@ export default {
   flex-direction: row-reverse;
 }
 
-.q-table__control:nth-child(2) > span.q-table__bottom-item {
+.q-table__control:nth-child(2) > span.q-table__bottom-item,
+i.notranslate.material-icons.q-icon.q-table__bottom-nodata-icon,
+thead,
+.q-table__title {
   display: none;
 }
 
@@ -272,5 +284,71 @@ export default {
 .q-table__control:nth-child(3) span.q-table__bottom-item:after {
   // content: " items";
   content: v-bind(pageNumber);
+}
+
+.q-table__bottom.row.items-center.q-table__bottom--nodata::after {
+  color: black;
+  content: "Select Wharehouse and Product";
+  position: absolute;
+  top: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.q-table__bottom.row.items-center.q-table__bottom--nodata {
+  color: transparent;
+  text-align: center;
+  width: 50%;
+  min-height: 100px;
+  background-image: url("../../assets/noDataFoundGreen.svg");
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  margin: 55px auto;
+  position: relative;
+  border-top: 0;
+}
+
+.q-table__top {
+  padding: 0;
+}
+
+.q-table__top .q-table__control {
+  flex-direction: column;
+}
+
+.q-table__top .q-table__control:last-of-type > div {
+  width: 100%;
+  padding: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.flexrow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 5%;
+  text-align: left;
+}
+
+.flexrow {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 1.5%;
+  text-align: left;
+}
+td {
+  width: 35%;
+}
+
+.flexrow input[type="text"] {
+  width: 28%;
+  height: 22px;
+  border: 1px solid #c7c7c7;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.flexrow span {
+  width: 28%;
 }
 </style>

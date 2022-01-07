@@ -253,4 +253,9 @@ export default {
 .multi-select {
   visibility: hidden;
 }
+
+.q-table__bottom .q-table__control {
+  max-height: 25px;
+  min-height: unset;
+}
 </style>

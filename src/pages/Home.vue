@@ -52,4 +52,7 @@ export default {
     }
   }
 }
+a.router-link-active.router-link-exact-active.active.nav-links + * {
+  display: none;
+}
 </style>
